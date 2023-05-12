@@ -116,7 +116,7 @@ class Lobby():
             return (1,)
 
         self.has_started = True
-        #remove cash monies froom blinds: head is small, head.next is big
+        #remove money from blinds: head is small, head.next is big
         self.head.player.raise_bet(self.little_blind)
         self.head.next.player.raise_bet(self.big_blind)
         self.cur_stakes = self.big_blind
@@ -301,8 +301,7 @@ class Lobby():
         winners_dict = {} #dict of winner id and winning amount
         
         while i > 0:
-# a little complex. Lets write it out. So basically, when there is a difference in the bets of the unfolded, we know that we have a sidepot situation. What we can do is take all people "above the difference" and add their bets. The problem is we have unfolded people as well who have some random bet in between the top and bottom number.
-#So we save a j value which is the largest index of a player who was not in the previous sidepot (equal to bot). We know that every person above j was already in a sidepot and can be added to every subsequent sidepot
+
             if unfolded_list[i].get_bet() != unfolded_list[i-1].get_bet():
                 j = calc_sidepot(j, i, player_list, unfolded_list, winners_dict, unfolded_list[i].get_bet(), unfolded_list[i-1].get_bet())
             
@@ -346,7 +345,16 @@ def delete_node(node):
     node.next.prev = node.prev 
 
 def create_sidepot(start, player_list, base, top):
-    #this is a bit complex and may not work
+    """
+    A little complex. Basically, when there is a difference in the bets of the unfolded, 
+    we know that we have a sidepot situation. What we can do is take all people
+    "above the difference" and add their bets. The problem is we have unfolded people 
+    as well who have some random bet in between the top and bottom number.
+    So we save a j value which is the largest index of a player who was not in the previous sidepot 
+    (equal to bot). We know that every person above j was already in a sidepot and can be added to every 
+    subsequent sidepot
+    """
+
     sidepot = (len(player_list) - start - 1) * (top - base)
 
     while player_list[start].get_bet() > base and start >= 0:

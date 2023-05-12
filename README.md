@@ -1,0 +1,35 @@
+# Poker-Bot
+Overview:  
+Bot that allows users to play a text-based texas hold'em poker through the messaged app Discord. Uses discord.py API wrapper.  
+
+Installation:  
+Clone the repository  
+  
+Usage:  
+Create a Discord bot ( https://discord.com/developers/docs/intro ) and enter the token into the token.txt file  
+run the command "python main.py" from the project top level.  
+Your bot is now online!  
+
+Player Commands:  
+-call  
+Poker call command  
+-create LOBBY  
+creates a lobby with name LOBBY (name must be unique)  
+-join LOBBY  
+joins a lobby with name LOBBY  
+-fold  
+Poker fold command  
+-info_lobby [LOBBY]  
+If no argument provided, list all lobbies inside a channel. If argument provided, list players inside lobby LOBBY  
+-info  
+Receive a DM about your player info from the bot for channel where command is issued  
+-raise  
+Poker raise command  
+-leave  
+Leave a lobby  
+-start  
+Start the poker game of the lobby as the leader  
+
+Implementation Details:  
+All poker lobbies are seperated on a discord channel basis, so a player can exist in multiple lobbies within different channels, but only one lobby per channel.  
+All rules should be fully implemented including precise tie-breaking, sidepots, and hand evaluation.  
