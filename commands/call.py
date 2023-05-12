@@ -18,4 +18,4 @@ async def call(client, message, player):
         cycle_res = lib.get_cycle_content(res, client, lobby)
         content += cycle_res[0]
         embed = cycle_res[1]
-        await lib.ping_msg(message, "".join(content), embed)
+        await lib.ping_msg(message, " ".join(content), embed)

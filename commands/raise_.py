@@ -10,17 +10,17 @@ async def raise_(client, message, args, player):
 
     #can't raise an amount greater than what they have
     lobby = player.get_lobby()
-    res = lobby.call_player(player)
+    res = lobby.raise_player(player, raise_amount)
     flag = res[0]
 
     if flag == 0:
-        lib.ping_msg(message, f"Cannot raise as the lobby '{lobby.get_name()}' has not started")
+        await lib.ping_msg(message, f"Cannot raise as the lobby '{lobby.get_name()}' has not started")
     elif flag == 1:
-        lib.ping_msg(message, f"Cannot raise as it is not your turn!")
+        await lib.ping_msg(message, f"Cannot raise as it is not your turn!")
     elif flag == 2:
-        lib.ping_msg(message, f"You cannot raise a negative amount!")
+        await lib.ping_msg(message, f"You cannot raise a negative amount!")
     elif flag == 3:
-        lib.ping_msg(message, f"You do not have enough to raise that amount")
+        await lib.ping_msg(message, f"You do not have enough to raise that amount")
     elif flag == 4:
         bet_amount = res[1]
         content = [f"You have bet ${bet_amount}."]
@@ -30,4 +30,4 @@ async def raise_(client, message, args, player):
         cycle_res = lib.get_cycle_content(res, client, lobby)
         content += cycle_res[0]
         embed = cycle_res[1]
-        lib.ping_msg(message, "".join(content), embed)
+        await lib.ping_msg(message, "".join(content), embed)

@@ -71,8 +71,10 @@ def get_cycle_content(res, client, lobby):
         embed.set_footer(text="To play again, reuse the 'start' command.")
     elif flag == 1: # Means we have simply moved to another round. WE need to output the river, and the person's turn, maybe the pot?
         embed= discord.Embed(title = "Game Update")
-        embed.add_field(name='River', value = compose_hand_str(lobby.get_river()))
+        embed.add_field(name='Common cards', value = compose_hand_str(lobby.get_river()))
         embed.add_field(value = mention(lobby.get_cur_player().get_id()), name = "Next Player")
+        embed.add_field(value = f"{lobby.pot}", name = "Pot")
+
     elif flag == 2: # someone has folded
         res = res[1]
         fold_res = get_folded_content(res, client, lobby, False)
@@ -85,7 +87,7 @@ def get_cycle_content(res, client, lobby):
         diff=lobby.get_stakes() - next_player.get_bet()
 
         if diff > 0:
-            embed.set_footer(text = 'You are short $' + diff +'.')
+            embed.set_footer(text = f'You are short ${diff}.')
 
     return (content, embed)
 
@@ -112,8 +114,8 @@ def get_folded_content(res, client, lobby, is_command):
             winnings=res[3]
             embed= discord.Embed(title="Game End")
             embed.add_field(name="Winner", value=client.get_user(winner_id).name)
-            embed.add_field(name="Winnings:", value=winnings)
-            embed.set_field(value="To play again, reuse the 'start' command.")
+            embed.add_field(name="Winnings:", value=f"${winnings}")
+            embed.set_footer(text="To play again, reuse the 'start' command.")
         elif flag == 3:
             res = res[2]
             cycle_res = get_cycle_content(res, client, lobby)

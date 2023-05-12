@@ -27,7 +27,7 @@ class Player():
     def get_lobby(self):
         return self.lobby
     
-    def get_balance(self):
+    def get_bank(self):
         return self.bank
     
     def get_bet(self):

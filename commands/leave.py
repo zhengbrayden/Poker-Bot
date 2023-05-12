@@ -21,7 +21,7 @@ async def leave(client, message, player, channel, Channels):
                 
         elif flag == 2:
             res = res[1]
-            fold_res = lib.get_folded_content(res,client,lobby)
+            fold_res = lib.get_folded_content(res, client, lobby, True)
             content += fold_res[0]
             embed = fold_res[1]
 

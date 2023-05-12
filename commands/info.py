@@ -1,34 +1,23 @@
-async def info(message, client, args, Channels):
+import discord
+import commands.header
+import lib
+async def info(client, message, player):
+    #give info on a player about bank, cards, and bet
+    #if not started, player won't have cards
+    bank = player.get_bank()
+    lobby = player.get_lobby()
+    embed = discord.Embed()
+    embed.add_field(value=f"${bank}", name = "Bank")
 
-    if message.channel.id not in Channels:
-        await message.channel.send('This channel contains no lobbies')
+    if not lobby.has_started:
+        dm_channel = await client.create_dm(message.author)
+        await dm_channel.send(embed = embed)
         return
+
+    bet = player.get_bet()
+    hand = player.get_hand()
+    embed.add_field(value=f"${bet}", name = "Bet")
+    embed.add_field(value=lib.compose_hand_str(hand), name = "Hand")
+    dm_channel = await client.create_dm(message.author)
+    await dm_channel.send(embed = embed)
     
-    channel = Channels[message.channel.id]
-
-    if len(args) == 0:
-        #output the channel info
-        lobbies = channel.get_lobbies()
-        content=["List of Lobbies:"]
-
-        for lobby in lobbies:
-            content.append(lobby.get_name())
-
-        await message.channel.send('\n'.join(content))
-        return
-    
-    name = " ".join(args)
-    lobby = channel.get_lobby(name)
-
-    if not lobby:
-        await message.channel.send("'" + name + "' is not a lobby in this channel!")
-        return
-    
-    #output lobby info (players inside)
-    content=["List of Players:"]
-
-    for player in lobby.get_players():
-        id=player.get_id()
-        content.append(client.get_user(id).name)
-
-    await message.channel.send('\n'.join(content))

@@ -5,13 +5,16 @@ import lib
 class Lobby():
 
     def __init__(self, leader_id, name):
-        self.init_helper()
         self.leader = leader_id
         self.players = {}
         self.head = None
         self.name = name
         self.big_blind = 15
         self.little_blind = 5
+        self.init_helper()
+
+    def get_pot(self):
+        return self.pot
 
     #returns a list of player objects
     def get_players(self):
@@ -81,8 +84,7 @@ class Lobby():
         
         player_id = player.get_id()
         player_node = self.players[player_id]
-        self.left_players[player_id] = self.players[player_id]
-        del self.players[player_id]
+        self.left_players.append(player_id)
         player_node.player.set_deleted()
 
         if len(self.players) == 0:
@@ -115,9 +117,9 @@ class Lobby():
 
         self.has_started = True
         #remove cash monies froom blinds: head is small, head.next is big
-        self.head.player.raise_bet(self.big_blind)
-        self.head.next.player.raise_bet(self.little_blind)
-
+        self.head.player.raise_bet(self.little_blind)
+        self.head.next.player.raise_bet(self.big_blind)
+        self.cur_stakes = self.big_blind
         #player to left of big blind goes first
         self.cur_node = self.head.next.next #twice the next per poker rule
         self.final_node = self.cur_node #stop at this guy (for now) Upon a raise, we basically go to the prev of the raiser. This works!
@@ -154,9 +156,9 @@ class Lobby():
                 winner_cursor = winner_cursor.next
     
             #return winners info. We have winners and we have amount won
-            temp = self.pot
+            winnings = self.pot - winner_cursor.player.get_bet()
             self.reset()
-            return (2, player.get_id(), winner_cursor.player.get_id(), temp)
+            return (2, player.get_id(), winner_cursor.player.get_id(), winnings)
 
         #cycle to next player
         return (3, player.get_id(), self.cycle_player())
@@ -221,7 +223,7 @@ class Lobby():
             #player has left
             return (2, self.fold_player(self.cur_node.player))
 
-        if self.cur_node.player.get_balance() == 0:
+        if self.cur_node.player.get_bank() == 0:
             #this is implemented outside of while loop because the only thing that this player can do is fold (if they have left). If it gets here, the player has not left
             return self.cycle_player()
 
@@ -235,9 +237,9 @@ class Lobby():
         self.final_node = None
         self.n_unfolded = 0
         self.round = 0
-        self.left_players = {}
+        self.left_players = []
         self.cur_stakes = 0
-        self.pot = 0
+        self.pot = self.big_blind + self.little_blind
 
     def reset(self):
         #set head to next
@@ -247,8 +249,9 @@ class Lobby():
             self.head = self.head.next
 
         #remove all deleted players
-        for player_node in self.left_players:
-            delete_node(player_node)
+        for player_id in self.left_players:
+            delete_node(self.players[player_id])
+            del self.players[player_id]
 
         #unfold all players, clear hands, clear bets
         self.head.player.reset()
@@ -306,6 +309,10 @@ class Lobby():
             i -= 1
 
         calc_sidepot(j, 0, player_list, unfolded_list, winners_dict, unfolded_list[0].get_bet(), 0)
+        
+        #remove winner's own bet from each winner's winnings
+        for id in winners_dict:
+            winners_dict[id] -= self.players[id].player.get_bet()
         return (0, winners_dict, id_list, hand_list)
     
     def end_round(self):
@@ -319,7 +326,6 @@ class Lobby():
     def progress_round(self):
         self.round += 1
         self.cur_node = self.head
-        self.cur_stakes = 0
         
         while self.cur_node.player.folded:
             self.cur_node = self.cur_node.next
@@ -392,5 +398,4 @@ def calc_sidepot(j, i, player_list, unfolded_list, winners_dict, top, bot):
     sidepot, j = create_sidepot(j, player_list, bot, top)
     winners = get_winners(i, unfolded_list) #potentially have someone winning 0 dollars, k we rewriting this part after sleep
     dist_sidepot(winners, sidepot, winners_dict)
-    print(j)
     return j
