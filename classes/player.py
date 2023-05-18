@@ -104,11 +104,11 @@ def calc_hand(hand):
                 
         else:
             repeat_count = 1
-
+    #next is full house
     #check triple. Hand is sorted. Can be more than one triple so we check from the top
     repeat_count = 1
     triple_val = None
-
+    double_val = None
     for i in range(len(hand) - 1, 0, - 1):
 
         if hand[i].value == hand[i-1].value:
@@ -117,19 +117,29 @@ def calc_hand(hand):
             if repeat_count == 3:
                 triple_val = hand[i].value
                 repeat_count = 1
-            #we have a full house
+                
+                #full house
+                if double_val:
+                    return 7 * 10 ** 10 + triple_val * 10 ** 8 + double_val * 10 ** 6
+
+            #full house
             elif repeat_count == 2 and triple_val:
                 double_val = hand[i].value
                 return 7 * 10 ** 10 + triple_val * 10 ** 8 + double_val * 10 ** 6
 
+        #First and only double, set it to double
         else:
+
+            if repeat_count == 2 and not double_val:
+                double_val = hand[i + 1].value
+
             repeat_count = 1
 
     #check straight
     score = calc_straight(hand)
 
     if score:
-        return score + 5 * 10 ** 10
+        return score * 10 ** 8 + 5 * 10 ** 10
 
     if triple_val:
 
@@ -197,7 +207,7 @@ def calc_straight(cards):
 
         #a straight exists
         if straight_count == 5: 
-            return cards[i + 3].value * 10 ** 8 # TODO broken?
+            return cards[i + 3].value
 
 #DATA STRUCTURES
 class Player_node():
