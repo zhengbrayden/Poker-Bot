@@ -10,6 +10,8 @@ Create a Discord bot ( https://discord.com/developers/docs/intro ) and enter the
 run the command "python main.py" from the project top level.  
 Your bot is now online!  
 
+To run a test TEST_FILE, use the command python tests/{TEST_FILE} from the project top level
+
 Player Commands:  
 -call  
 Poker call command  
