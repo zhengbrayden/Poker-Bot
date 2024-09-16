@@ -1,3 +1,4 @@
+```
 # Poker-Bot
 Overview:  
 Bot that allows users to play a text-based texas hold'em poker through the messaged app Discord. Uses discord.py API wrapper.  
@@ -18,7 +19,7 @@ Have players join the lobby through command
 -join myLobby
 Once all players have joined, have host start the lobby through command
 -start
-Your game has now started
+Your game has now started! Have fun! And gamble responsibly.
 
 Player Commands:  
 -call  
