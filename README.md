@@ -1,49 +1,54 @@
-```
 # Poker-Bot
-Overview:  
-Bot that allows users to play a text-based texas hold'em poker through the messaged app Discord. Uses discord.py API wrapper.  
 
-Installation:  
-Clone the repository  
-  
-Running the Bot:  
-Create a Discord bot ( https://discord.com/developers/docs/intro ) and enter the token into the token.txt file  
-run the command "python main.py" from the project top level.  
-Your bot is now online!  
+## Overview
+A Discord bot that allows users to play text-based Texas Hold'em poker through Discord, using the `discord.py` API wrapper.
 
-Quickstart Guide:
-In a server that contains the bot,
-Have host create a lobby through command
--create myLobby
-Have players join the lobby through command
--join myLobby
-Once all players have joined, have host start the lobby through command
--start
-Your game has now started! Have fun! And gamble responsibly.
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd Poker-Bot
+   ```
 
-Player Commands:  
--call  
-Poker call command  
--create LOBBY  
-creates a lobby with name LOBBY (name must be unique)  
--join LOBBY  
-joins a lobby with name LOBBY  
--fold  
-Poker fold command  
--info_lobby [LOBBY]  
-If no argument provided, list all lobbies inside a channel. If argument provided, list players inside lobby LOBBY  
--info  
-Receive a DM about your player info from the bot for channel where command is issued  
--raise  
-Poker raise command  
--leave  
-Leave a lobby  
--start  
-Start the poker game of the lobby as the leader  
+## Running the Bot
+1. [Create a Discord bot](https://discord.com/developers/docs/intro) and copy the bot token.
+2. Paste the token into a `token.txt` file in the root directory.
+3. Run the bot:
+   ```bash
+   python main.py
+   ```
 
-Implementation Details:  
-All poker lobbies are seperated on a discord channel basis, so a player can exist in multiple lobbies within different channels, but only one lobby per channel.  
-All rules should be fully implemented including precise tie-breaking, sidepots, and hand evaluation.  
+## Quickstart Guide
+1. Create a lobby as the host:
+   ```bash
+   -create myLobby
+   ```
+2. Players join the lobby:
+   ```bash
+   -join myLobby
+   ```
+3. Once all players have joined, the host starts the game:
+   ```bash
+   -start
+   ```
+   
+## Player Commands
+- `-call`: Call the current bet.
+- `-create <LOBBY>`: Create a new lobby with a unique name.
+- `-join <LOBBY>`: Join an existing lobby by name.
+- `-fold`: Fold your current hand.
+- `-info_lobby [LOBBY]`: Show all lobbies or players in a specific lobby.
+- `-info`: Get a DM with your player info for the current channel.
+- `-raise`: Raise the current bet.
+- `-leave`: Leave the current lobby.
+- `-start`: Start the game as the host.
 
-Testing:
-To run a test TEST_FILE, use the command python tests/{TEST_FILE} from the project top level
+## Implementation Details
+- Each Discord channel can host multiple lobbies, but a player can only participate in one lobby per channel.
+- Full poker rules are implemented, including tie-breaking, sidepots, and hand evaluation.
+
+## Testing
+Tests are located in the `tests/` directory. Run a test by using the following command:
+```bash
+python <path_to_test>
+```
