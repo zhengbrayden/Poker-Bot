@@ -12,7 +12,7 @@ A Discord bot that allows users to play text-based Texas Hold'em poker through D
 
 ## Running the Bot
 1. [Create a Discord bot](https://discord.com/developers/docs/intro) and copy the bot token.
-2. Paste the token into a `token.txt` file in the root directory.
+2. Create a `token.txt` file in the root directory and paste the token into it.
 3. Run the bot:
    ```bash
    python main.py
